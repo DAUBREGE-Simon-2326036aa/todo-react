@@ -2,14 +2,26 @@ import React, { useState } from 'react';
 import Body from './component/Body';
 import Footer from './component/Footer';
 import Popup from './component/Popup';
+import CategoryPopup from './component/CategoryPopup';
 import data from './data/start.json';
 
 function App() {
     const [tasks, setTasks] = useState(data.taches);
-    const [showPopup, setShowPopup] = useState(false);
+    const [categories, setCategories] = useState(data.categories);
+    const [showTaskPopup, setShowTaskPopup] = useState(false);
+    const [showCategoryPopup, setShowCategoryPopup] = useState(false);
+
 
     const handleAddTask = (newTask) => {
         setTasks([...tasks, newTask]);
+    };
+
+    const handleAddCategory = (newCategory) => {
+        setCategories([...categories, {
+            ...newCategory,
+            id: Date.now(),
+            color: newCategory.color || '#cccccc'
+        }]);
     };
 
     return (
@@ -17,12 +29,23 @@ function App() {
             <header className="App-header">
                 <h1>Ma TodoList</h1>
             </header>
-            <Body data={{ taches: tasks }} />
-            <Footer onAddTask={() => setShowPopup(true)} />
-            {showPopup && (
+            <Body data={ data } />
+            <Footer
+                onAddTask={() => setShowTaskPopup(true)}
+                onAddCategory={() => setShowCategoryPopup(true)}
+            />
+            {showTaskPopup && (
                 <Popup
-                    onClose={() => setShowPopup(false)}
-                    onAddTask={handleAddTask}
+                    onClose={() => setShowTaskPopup(false)}
+                    onAdd={handleAddTask}
+                    type="task"
+                />
+            )}
+
+            {showCategoryPopup && (
+                <CategoryPopup
+                    onClose={() => setShowCategoryPopup(false)}
+                    onAdd={handleAddCategory}
                 />
             )}
         </div>

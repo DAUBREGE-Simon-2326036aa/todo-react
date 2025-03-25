@@ -10,11 +10,15 @@ function Popup({ onClose, onAddTask }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         const newTask = {
-            id: Date.now(), // Génère un ID unique
+            id: Date.now(),
             title,
             description,
             date_creation: new Date().toLocaleDateString('fr-FR'), // Date actuelle
-            date_echeance: dueDate,
+            date_echeance: new Date().toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }),
             done: false,
             urgent: false,
             contacts: contacts.split(',').map(name => ({ name: name.trim() })),
